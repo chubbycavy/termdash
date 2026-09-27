@@ -91,24 +91,16 @@ def test_blank_title_and_bad_date_are_rejected_in_place(tmp_path):
         await pilot.pause(0.1)
 
         await pilot.click("#todo-save")
-        await pilot.pause(0.1)
+        await pilot.pause(0.3)
         error = str(todo.query_one("#todo-form-error", Static).render())
         assert "Title is required." in error
         assert current_view(todo) == "todo-form-view"
 
         todo.query_one("#todo-title-input", Input).value = "Later"
         todo.query_one("#todo-due-date-input", Input).value = "24-08-2026"
-        title_before = todo.query_one("#todo-title-input", Input).value
         await pilot.click("#todo-save")
-        await pilot.pause(0.1)
+        await pilot.pause(0.3)
         error = str(todo.query_one("#todo-form-error", Static).render())
-        focused = pilot.app.focused
-        print(
-            f"DBG before={title_before!r} "
-            f"now={todo.query_one('#todo-title-input', Input).value!r} "
-            f"error={error!r} view={current_view(todo)} "
-            f"focused={type(focused).__name__}"
-        )
         assert "Due date must use YYYY-MM-DD." in error
         assert current_view(todo) == "todo-form-view"
 
