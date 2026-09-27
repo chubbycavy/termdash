@@ -1,0 +1,52 @@
+# termdash default layout.
+#
+# Copy this file to your config directory to customise the dashboard:
+#   Windows: %APPDATA%\termdash\termdash.toml
+#   Linux:   ~/.config/termdash/termdash.toml
+#   macOS:   ~/Library/Application Support/termdash/termdash.toml
+# or point at any file with --config PATH / TERMDASH_CONFIG.
+#
+# kind  : widget type ("hbox" splits left-to-right, "vbox" top-to-bottom)
+# weight: share of the parent relative to siblings (default 1)
+# opts  : widget options table (validated against each widget's schema)
+
+theme = "nord"
+
+[widgets]
+kind = "hbox"
+
+[widgets.left]
+kind = "vbox"
+
+[widgets.left.clock]
+kind = "clock"
+opts = { timezone = "local", label = "Home" }
+
+# A local todo list. Titles, notes, and due dates persist in a SQLite
+# database; select "Manage todos" in the widget for the add/edit menus.
+# opts: max_items caps the summary, database overrides the storage path.
+# [widgets.left.todos]
+# kind = "todo"
+# opts = { max_items = 10 }
+
+[widgets.left.sysmon]
+kind = "sysmon"
+opts = { interval = 1, history = 38 }
+
+[widgets.right]
+kind = "vbox"
+weight = 2
+
+[widgets.right.top]
+kind = "hbox"
+
+[widgets.right.top.timer]
+kind = "timer"
+opts = { preset_seconds = 300 }
+
+[widgets.right.top.stopwatch]
+kind = "stopwatch"
+
+[widgets.right.weather]
+kind = "weather"
+opts = { location = "Sydney", units = "metric", refresh_minutes = 15 }

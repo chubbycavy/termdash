@@ -1,0 +1,18 @@
+# A deliberately broken config used to demo `termdash validate`.
+
+theme = "neon"
+
+[widgets]
+kind = "hbox"
+
+[widgets.clock]
+kind = "clock"
+opts = { timezone = "Mars/Olympus", frobnicate = true }
+
+[widgets.tymer]
+kind = "timer"
+weight = -1
+colour = "red"
+
+[widgets.what]
+kind = "banana"

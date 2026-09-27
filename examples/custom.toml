@@ -1,0 +1,26 @@
+# A customised termdash layout: weights, spacer, and a deliberately broken tile
+# so you can see how config errors surface without taking down the dashboard.
+
+theme = "gruvbox"
+
+[widgets]
+kind = "hbox"
+
+[widgets.clock]
+kind = "clock"
+weight = 3
+opts = { timezone = "UTC", label = "Zulu" }
+
+[widgets.sysmon]
+kind = "sysmon"
+
+[widgets.gap]
+kind = "spacer"
+
+[widgets.broken]
+kind = "weather"
+opts = { location = "Melbourne", refresh_minutes = "often" }
+
+[widgets.timer]
+kind = "timer"
+opts = { preset_seconds = 600 }

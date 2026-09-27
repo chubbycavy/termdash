@@ -1,0 +1,58 @@
+[project]
+name = "termdash"
+version = "0.2.0"
+description = "A configurable terminal dashboard with weighted layouts and typed options."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+keywords = ["dashboard", "terminal", "tui", "textual"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "textual>=7.5,<8",
+    "pydantic>=2.13,<3",
+    "httpx>=0.28,<1",
+    "psutil>=7,<8",
+    "platformdirs>=4,<5",
+]
+
+[project.scripts]
+termdash = "termdash.cli:main"
+
+[project.urls]
+Repository = "https://example.invalid/termdash"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8,<9",
+    "pytest-textual-snapshot>=1.1,<2",
+    "pyright>=1.1,<2",
+    "ruff>=0.16,<0.17",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/termdash"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pyright]
+include = ["src"]
+pythonVersion = "3.12"
+typeCheckingMode = "basic"
