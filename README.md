@@ -1,5 +1,8 @@
 # termdash
 
+[![CI](https://github.com/chubbycavy/termdash/actions/workflows/ci.yml/badge.svg)](https://github.com/chubbycavy/termdash/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/termdash)](https://pypi.org/project/termdash/)
+
 A configurable terminal dashboard built with [Textual](https://textual.textualize.io/).
 Arrange clocks, timers, system monitors, and weather into nested tiles with
 **weighted layouts**, **typed options**, and **themes**.
