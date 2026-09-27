@@ -128,3 +128,25 @@ def test_timer_editing_snapshot(snap_compare):
         await pilot.press("1", "3", "0")
 
     assert snap_compare(app, terminal_size=(60, 16), run_before=start_editing)
+
+
+def test_custom_composite_snapshot(snap_compare, monkeypatch):
+    freeze_environment(monkeypatch)
+    app = Termdash(
+        parse_config(
+            """
+            theme = "solarized"
+
+            [widgets]
+            kind = "custom"
+            opts = { text = "Focus", clock = true, timer = true, sysmon = true,
+                     stopwatch = true, timezone = "UTC" }
+            """,
+            source="snapshot",
+        )
+    )
+
+    async def settle(pilot):
+        await pilot.pause(0.3)
+
+    assert snap_compare(app, terminal_size=(60, 30), run_before=settle)

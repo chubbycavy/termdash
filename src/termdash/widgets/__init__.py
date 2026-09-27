@@ -2,6 +2,7 @@
 
 from termdash.widgets import (
     clock,
+    custom,
     layout,
     spacer,
     stopwatch,
@@ -25,6 +26,7 @@ __all__ = [
     "WidgetEntry",
     "available_kinds",
     "clock",
+    "custom",
     "layout",
     "lookup",
     "register",

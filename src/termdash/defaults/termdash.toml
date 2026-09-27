@@ -29,6 +29,11 @@ opts = { timezone = "local", label = "Home" }
 # kind = "todo"
 # opts = { max_items = 10 }
 
+# A single-layer stack of enabled widgets in a fixed order. Uncomment to try:
+# [widgets.left.focus]
+# kind = "custom"
+# opts = { text = "Focus", clock = true, timer = true, sysmon = true, timezone = "UTC" }
+
 [widgets.left.sysmon]
 kind = "sysmon"
 opts = { interval = 1, history = 38 }

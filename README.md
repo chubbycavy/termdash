@@ -78,6 +78,7 @@ Unknown widgets and invalid options render as a warning tile in place, and
 | `sysmon` | `interval` (seconds between samples), `history` (graph samples) |
 | `weather` | `location`, `units` (`metric`/`imperial`), `refresh_minutes` |
 | `todo` | `max_items` (summary cap), `database` (path override) |
+| `custom` | `text` heading, switches (`clock`, `timer`, `stopwatch`, `sysmon`, `todo`, `weather`), `timezone` |
 | `spacer` | — (empty tile) |
 | `hbox` / `vbox` | layout containers; child tables are their children |
 
@@ -99,6 +100,20 @@ these Vim-inspired bindings:
 - `Esc`: go back
 
 Deleting a todo or clearing the whole database asks for confirmation first.
+
+### Custom
+
+`custom` stacks the widgets you enable into one tile, in a fixed order
+(clock, timer, stopwatch, sysmon, todo, weather):
+
+```toml
+[widgets.focus]
+kind = "custom"
+opts = { text = "Focus", clock = true, timer = true, sysmon = true, timezone = "UTC" }
+```
+
+`timezone` configures the nested clock; every other element keeps its
+built-in defaults. With nothing enabled the tile shows "No elements enabled".
 
 ## Themes
 
