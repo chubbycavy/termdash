@@ -165,7 +165,7 @@ def _parse_node(raw: Any, path: str, issues: list[str]) -> WidgetNode:
         problems.append(
             f"unknown widget '{kind}'; available: {', '.join(available_kinds())}"
         )
-        return _fail(path, problems, issues)
+        return _fail(path, problems, issues, weight)
 
     options: BaseModel | None = None
     if entry is not None and (opts or entry.options.model_fields):
@@ -187,16 +187,18 @@ def _parse_node(raw: Any, path: str, issues: list[str]) -> WidgetNode:
         )
 
     if problems:
-        return _fail(path, problems, issues)
+        return _fail(path, problems, issues, weight)
 
     return WidgetNode(
         kind=kind.casefold(), weight=weight, options=options, children=children
     )
 
 
-def _fail(path: str, problems: list[str], issues: list[str]) -> WidgetNode:
+def _fail(
+    path: str, problems: list[str], issues: list[str], weight: float = 1.0
+) -> WidgetNode:
     issues.extend(f"{path}: {part}" for part in problems)
-    return WidgetNode.invalid(f"{path}: " + "; ".join(problems))
+    return WidgetNode.invalid(f"{path}: " + "; ".join(problems), weight)
 
 
 def _format_options_error(

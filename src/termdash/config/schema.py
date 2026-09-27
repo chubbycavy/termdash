@@ -24,8 +24,8 @@ class WidgetNode:
         return self.message is None
 
     @classmethod
-    def invalid(cls, message: str) -> WidgetNode:
-        return cls(kind=INVALID_KIND, message=message)
+    def invalid(cls, message: str, weight: float = 1.0) -> WidgetNode:
+        return cls(kind=INVALID_KIND, message=message, weight=weight)
 
 
 @dataclass

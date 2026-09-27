@@ -60,6 +60,59 @@ def test_timer_caption_fits_inside_tight_tile():
     run_pilot(Termdash(config), scenario, size=(40, 16))
 
 
+def test_timer_editing_is_rejected_while_running():
+    config = config_for('[widgets]\nkind = "timer"\nopts = { preset_seconds = 300 }\n')
+
+    async def scenario(pilot):
+        display = pilot.app.query_one(TimerDisplay)
+        await pilot.click("#timer-control")
+        await pilot.pause(0.15)
+        assert pilot.app.query_one(Timer).mode == "running"
+
+        await pilot.click("TimerDisplay")
+        await pilot.pause(0.15)
+        assert not display.editing
+
+    run_pilot(Termdash(config), scenario)
+
+
+def test_timer_completion_cycle():
+    config = config_for('[widgets]\nkind = "timer"\nopts = { preset_seconds = 1 }\n')
+
+    async def scenario(pilot):
+        timer = pilot.app.query_one(Timer)
+        await pilot.click("#timer-control")
+        await pilot.pause(0.2)
+        assert timer.mode == "running"
+
+        await pilot.pause(1.4)
+        assert timer.mode == "complete"
+        assert "complete" in timer.classes
+
+        await pilot.click("#timer-control")
+        await pilot.pause(0.15)
+        assert timer.mode == "stopped"
+        assert "complete" not in timer.classes
+        assert pilot.app.query_one(TimerDisplay).time_text == "00:00:01"
+
+    run_pilot(Termdash(config), scenario)
+
+
+def test_stopwatch_time_advances_while_running():
+    config = config_for('[widgets]\nkind = "stopwatch"\n')
+
+    async def scenario(pilot):
+        display = pilot.app.query_one(StopwatchDisplay)
+        await pilot.click("#start")
+        await pilot.pause(0.3)
+        await pilot.click("#stop")
+        await pilot.pause(0.1)
+        assert display.time_text != "00:00:00.00"
+        assert display.total >= 0.3
+
+    run_pilot(Termdash(config), scenario)
+
+
 def test_timer_rejects_invalid_digit_input(monkeypatch):
     config = config_for('[widgets]\nkind = "timer"\n')
 

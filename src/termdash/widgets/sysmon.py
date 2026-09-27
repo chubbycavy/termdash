@@ -42,14 +42,24 @@ class HistoryGraph(Static):
         self.samples: list[float] = []
 
     def add_sample(self, value: float) -> None:
+        """Append a clamped sample and redraw the graph."""
+        self.record(value)
+        self.update(self.render_graph())
+
+    def record(self, value: float) -> list[float]:
+        """Append a clamped sample to the history without redrawing."""
         self.samples = [*self.samples, max(0.0, min(100.0, value))][
             -self.history_size :
         ]
+        return self.samples
+
+    def render_graph(self) -> Text:
+        """Render the recorded samples as threshold-coloured bars."""
         graph = Text()
         for sample in self.samples:
             index = min(len(self.BARS) - 1, int(sample / 100 * len(self.BARS)))
             graph.append(self.BARS[index], style=self.colour_for(sample))
-        self.update(graph)
+        return graph
 
     def colour_for(self, value: float) -> str:
         if value < self.green_below:

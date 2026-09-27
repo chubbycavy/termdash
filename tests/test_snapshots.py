@@ -112,3 +112,19 @@ def test_todo_menu_snapshot(snap_compare, tmp_path):
         await pilot.pause(0.3)
 
     assert snap_compare(app, terminal_size=(60, 24), run_before=open_menu)
+
+
+def test_timer_editing_snapshot(snap_compare):
+    app = Termdash(
+        parse_config(
+            'theme = "dark"\n[widgets]\nkind = "timer"\n', source="snapshot"
+        )
+    )
+
+    async def start_editing(pilot):
+        await pilot.pause(0.3)
+        await pilot.click("TimerDisplay")
+        await pilot.pause(0.1)
+        await pilot.press("1", "3", "0")
+
+    assert snap_compare(app, terminal_size=(60, 16), run_before=start_editing)

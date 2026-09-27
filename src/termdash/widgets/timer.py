@@ -66,9 +66,14 @@ class TimerDisplay(Digits):
             event.stop()
 
     def render_buffer(self) -> None:
-        digits = self.buffer[-6:].rjust(6, "0")
-        self.time_text = f"{digits[:2]}:{digits[2:4]}:{digits[4:]}"
+        self.time_text = self.format_digits(self.buffer)
         self.update(self.time_text)
+
+    @staticmethod
+    def format_digits(digits: str) -> str:
+        """Render up to six right-aligned digits as ``HH:MM:SS``."""
+        padded = digits[-6:].rjust(6, "0")
+        return f"{padded[:2]}:{padded[2:4]}:{padded[4:]}"
 
     def commit(self) -> None:
         seconds = self.parse_buffer(self.buffer)
@@ -120,11 +125,15 @@ class TimerDisplay(Digits):
             self.render_remaining()
 
     def render_remaining(self) -> None:
-        total = ceil(self.remaining)
+        self.time_text = self.format_seconds(ceil(self.remaining))
+        self.update(self.time_text)
+
+    @staticmethod
+    def format_seconds(total: int) -> str:
+        """Render whole seconds as ``HH:MM:SS``."""
         hours, rest = divmod(total, 3600)
         minutes, seconds = divmod(rest, 60)
-        self.time_text = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-        self.update(self.time_text)
+        return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
 
 @register("timer", TimerOptions)

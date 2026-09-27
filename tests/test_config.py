@@ -169,3 +169,70 @@ def test_children_are_parsed_even_if_sibling_is_broken():
         """
     )
     assert len(config.issues) == 2
+
+
+def test_boolean_weight_is_rejected():
+    config = parse('[widgets]\nkind = "clock"\nweight = true\n')
+    assert not config.root.valid
+    assert "positive number" in config.issues[0]
+
+
+def test_string_weight_is_rejected():
+    config = parse('[widgets]\nkind = "clock"\nweight = "2"\n')
+    assert not config.root.valid
+    assert "positive number" in config.issues[0]
+
+
+def test_fractional_weight_is_accepted():
+    config = parse('[widgets]\nkind = "clock"\nweight = 1.5\n')
+    assert config.root.valid
+    assert config.root.weight == 1.5
+
+
+def test_root_may_be_a_leaf_widget():
+    config = parse('[widgets]\nkind = "clock"\nopts = { timezone = "UTC" }\n')
+    assert config.issues == []
+    assert config.root.valid
+    assert config.root.children == []
+
+
+def test_kind_whitespace_is_trimmed():
+    config = parse('[widgets]\nkind = "  clock  "\n')
+    assert config.issues == []
+    assert config.root.kind == "clock"
+
+
+def test_blank_kind_is_rejected():
+    config = parse('[widgets]\nkind = ""\n')
+    assert not config.root.valid
+    assert "missing or invalid 'kind'" in config.issues[0]
+
+
+def test_empty_theme_is_reported():
+    config = parse('theme = ""\n[widgets]\nkind = "clock"\n')
+    assert config.theme == "dark"
+    assert any("unknown theme" in issue for issue in config.issues)
+    assert config.root.valid
+
+
+def test_all_issues_report_paths_from_the_whole_tree():
+    config = parse(
+        """
+        theme = "neon"
+
+        [widgets]
+        kind = "hbox"
+
+        [widgets.a]
+        kind = "nope"
+
+        [widgets.b]
+        kind = "timer"
+        weight = -1
+        """
+    )
+    paths = [issue.split(":")[0] for issue in config.issues]
+    assert "theme" in paths
+    assert "widgets.a" in paths
+    assert "widgets.b" in paths
+    assert len(config.issues) >= 3
