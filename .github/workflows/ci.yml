@@ -17,12 +17,12 @@ jobs:
       contents: read
     steps:
       - name: Check out the source
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v10
+        uses: astral-sh/setup-uv@v10.2.0
         with:
           enable-cache: true
 
